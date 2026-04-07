@@ -1,0 +1,35 @@
+name: 'forward_role_migration'
+version: '1.0.0'
+config-version: 2
+
+profile: 'databricks'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+docs-paths: ["docs"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  forward_role_migration:
+    staging:
+      +materialized: view
+      +tags: ["staging", "sql_server_migration"]
+    intermediate:
+      +materialized: table
+      +tags: ["intermediate"]
+    mart:
+      +materialized: table
+      +tags: ["mart", "analytics_ready"]
+
+seeds:
+  forward_role_migration:
+    +schema: seeds
+
+vars:
+  source_database: 'LegacyDB'
+  source_schema: 'dbo'
+  migration_date: '2026-01-01'
